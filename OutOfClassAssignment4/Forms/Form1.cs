@@ -13,7 +13,19 @@ namespace OutOfClassAssignment4
 {
     public partial class Form1 : Form
     {
-
+        /*
+         * 
+         * Hey! this is my tic tac toe take.
+         * It probably could have been better but oh well
+         * 
+         * Methods in here
+         *      Make the game
+         *      Check game status
+         *      check if anyone won and spits out a gamestatus
+         *      computer's turn
+         *      player's click listener           
+         * 
+         */
         Random random = new Random();
         int PlayerWin = 0;
         int ComputerWin = 0;
@@ -27,73 +39,75 @@ namespace OutOfClassAssignment4
         {
             InitializeComponent();
             CreateGame();
-            this.Size = new Size(800,420);
-            this.Size = new Size(this.Width,(this.Width/2)+20);
+            this.Size = new Size(800,420);                      //force the window to be this size
+            this.Size = new Size(this.Width,(this.Width/2)+20); //adjust it
         }
 
-        Panel TicTacToeShow;
+        Panel TicTacToeShow;            //panel that holds all the buttons
         public void CreateGame()    //Creates the board
         {
-            Button[,] Set = new Button[3,3];        //Multi-dimension array
-            TicTacToeSize = (this.Width / 2) - 50;
-            BoxSize = TicTacToeSize / 3;
-            TicTacToeShow = new Panel();
-            TicTacToeShow.Size = new Size(TicTacToeSize,TicTacToeSize);
-            TicTacToeShow.BackColor = Color.FromArgb(20,20,20);
-            TicTacToeShow.Location = new Point(10,10);
-            TicTacToeShow.BorderStyle = BorderStyle.FixedSingle;
-            this.Controls.Add(TicTacToeShow);
+            Button[,] Set = new Button[3,3];        //Multi-dimension array for the buttons
+            TicTacToeSize = (this.Width / 2) - 50;          //measure the size 
+            BoxSize = TicTacToeSize / 3;                    //make box sizes
+            TicTacToeShow = new Panel();                    //establish the panel, this is where the program will look for buttons
+            TicTacToeShow.Size = new Size(TicTacToeSize,TicTacToeSize);     //size of the panel based on the measurements
+            TicTacToeShow.BackColor = Color.FromArgb(20,20,20);             
+            TicTacToeShow.Location = new Point(10,10);                      //place a new location
+            TicTacToeShow.BorderStyle = BorderStyle.FixedSingle;            //add a border
+            this.Controls.Add(TicTacToeShow);                               //add the panel to the main form
 
             Console.WriteLine(TicTacToeSize);
-            for (int i = 0; i < Set.GetLength(0); i++)
+            for (int x = 0; x < Set.GetLength(0); x++)                      //creating the buttons, first loop (x coordinate)
             {
-                for (int x = 0; x < Set.GetLength(1); x++)
+                for (int y = 0; y < Set.GetLength(1); y++)                      //second loop (y coordinate in axis form)
                 {
-                    Set[i, x] = new Button();
-                    Set[i, x].Size = new Size(BoxSize, BoxSize);
-                    Set[i, x].Location = new Point(i * BoxSize, x * BoxSize);
-                    Set[i, x].Text = "";
-                    Set[i, x].Name = i + "," + x;
-                    Set[i, x].ForeColor = Color.FromArgb(190,190,190);
-                    Set[i,x].Font = new Font("Arial", (BoxSize/5), FontStyle.Regular);
-                    Set[i, x].Click += UserPress;
+                    Set[x, y] = new Button();                       
+                    Set[x, y].Size = new Size(BoxSize, BoxSize);
+                    Set[x, y].Location = new Point(x * BoxSize, y * BoxSize);       //position it based on the x+y coordinates
+                    Set[x, y].Text = "";                                            //blank text because the program looks for blanks
+                    Set[x, y].Name = x + "," + y;                                   //create a name, might need it might not
+                    Set[x, y].ForeColor = Color.FromArgb(190,190,190);              
+                    Set[x,y].Font = new Font("Arial", (BoxSize/5), FontStyle.Regular);
+                    Set[x, y].Click += UserPress;                                   //click listener
 
-                    TicTacToeShow.Controls.Add(Set[i,x]);                    
+                    TicTacToeShow.Controls.Add(Set[x,y]);                           //add it to the panel we made earlier
                 }
             }
         }
 
-        public void GameGame(String Checking)
+        public void GameGame(String Checking)       //checks game conditions
         {
             Console.WriteLine(Checking);
-            String[] Status = Regex.Split(Checking,",");
-            if (Status[0] == "tie")
+            String[] Status = Regex.Split(Checking,",");        //split the string, check the first element and second element
+            if (Status[0] == "tie")                     //if game finishes
             {
-                Console.WriteLine("Game Tie");
+                Console.WriteLine("Game Tie");              //clear the game
                 counter = 0;
                 TieCount++;
-                for (int i = 0; i < TicTacToeShow.Controls.Count; i++)
+                for (int i = 0; i < TicTacToeShow.Controls.Count; i++)          //loop through the established panel earlier and clears all the text
                 {
                     TicTacToeShow.Controls[i].Text = "";
                 }
-            }else if (Status[0] == "win")
+            }else if (Status[0] == "win")                       //checks game condition
             {
                 Console.WriteLine("Games won!");
                 counter = 0;
-                Console.WriteLine(Status[1]);
-                if (Status[1] == "X")
+                Console.WriteLine(Status[1]);           //the string is checking the second element
+                if (Status[1] == "X")           //player is X
                 {
                     PlayerWin++;
                 }
                 else
                 {
-                    ComputerWin++;
+                    ComputerWin++;              //only other option is y, so computer wins otherwise
                 }
-                for (int i = 0; i < TicTacToeShow.Controls.Count; i++)
+                for (int i = 0; i < TicTacToeShow.Controls.Count; i++)      //loop everything again and clear the text
                 {
                     TicTacToeShow.Controls[i].Text = "";
                 }
             }
+
+            //check if we need to resize, just ignore this. It was a side thing I wanted to practice on
             this.PlayerCounter.Location = new Point((this.TicTacToeShow.Location.X+this.TicTacToeShow.Width)+10,this.Height/2);
             this.ComputerCounter.Location = new Point(this.PlayerCounter.Location.X,(this.PlayerCounter.Location.Y+this.PlayerCounter.Height)+10);
             this.TieCounter.Location = new Point(this.ComputerCounter.Location.X, (this.ComputerCounter.Location.Y + this.ComputerCounter.Height) + 10);
@@ -103,30 +117,30 @@ namespace OutOfClassAssignment4
             this.TieCounter.Text = "Ties: " + TieCount;
         }
 
-        public void ComputerTurn()
+        public void ComputerTurn()          //establish computer's turn
         {
-            while (true)
+            while (true)            //loop over and over again until it breaks
             {               
-                String getPossible = "";
-                for (int i = 0; i < TicTacToeShow.Controls.Count; i++)
+                String getPossible = "";        //in hind sight, I probably could have gotten away with just using a list<string> but oh well. list<string> could potentially make this so much easier
+                for (int i = 0; i < TicTacToeShow.Controls.Count; i++)      //grab the possible slots we can use
                 {
-                    if (TicTacToeShow.Controls[i].Text == "")
+                    if (TicTacToeShow.Controls[i].Text == "")       
                     {
                         getPossible += i + "//";
                     }
                 }
-                String[] Possible = Regex.Split(getPossible, "//");
-                String mm = Possible[random.Next(0, Possible.Length)];
+                String[] Possible = Regex.Split(getPossible, "//");         //could have just been a list<string>
+                String mm = Possible[random.Next(0, Possible.Length)];      //random through the possibilitites
                 try
                 {
-                    int move = Convert.ToInt32(mm);
+                    int move = Convert.ToInt32(mm);         //if it success then cool
                     TicTacToeShow.Controls[move].Text = "O";
-                    GameGame(WinnerCheck());
-                    break;
+                    GameGame(WinnerCheck());        //check if computer wins
+                    break;                          //break out of the loop
                 }
                 catch
                 {
-
+                    //if it is not then loop again. 
                 }
             }
         }
@@ -145,16 +159,17 @@ namespace OutOfClassAssignment4
          * |  2  |  5  |  8  |
          * |_____|_____|_____|
          */
-        public String WinnerCheck()
+        public String WinnerCheck()     //checks if anyone wins
         {
             var Check = TicTacToeShow.Controls; //Shortcuts
             string toreturn = "no";
-            if (counter + 1 >= 9)
+            if (counter + 1 >= 9)       //run out of spaces then it's a tie
             {
                 toreturn = "tie";
             }
             else
             {
+                //yeah I don't know how to make this "smarter" just brute forced it
                 //Check first to second, this implies first and second are the same, then if second is same as third, first equals third
                 //Check Vertical
                 counter++;
